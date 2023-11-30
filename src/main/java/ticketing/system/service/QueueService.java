@@ -34,12 +34,15 @@ public class QueueService {
             users = waitingRoomService.getWaitingRoom().stream()
                     .sorted(Comparator.comparing(User::getQueuePosition)).toList();
             Thread[] threads = new Thread[tickets.size()];
+
             try {
                 for (int i = 0; i < tickets.size(); i++) {
                     threads[i] = new Thread(users.get(i));
                     threads[i].start();
                 }
-            }catch (ArrayIndexOutOfBoundsException e) {
+            }
+            // Case that numbers of tickets > numbers of users in the queue
+            catch (ArrayIndexOutOfBoundsException e) {
                 new TicketGreaterThanUserException();
                 break;
             }
@@ -51,7 +54,7 @@ public class QueueService {
             Thread.sleep(2000);
 
             if(tickets.size() != 0) {
-                System.out.println("let next "+ tickets.size()+" users in queue");
+                System.out.println("Let next "+ tickets.size()+" users in queue");
             }
             else System.out.println("TICKET SOLD OUT");
         }
@@ -63,17 +66,13 @@ public class QueueService {
      *
      * @param user the user who will attempt to purchase a ticket
      */
-    public static void attemptPurchase(User user, int processTime) {
+    public static void attemptPurchase(User user, int processTime) throws InterruptedException {
             for (Ticket ticket : tickets) {
                 if (ticket.tryLock()) {
                     // If process time > 2000 (2s) then the user get kicked out and unlock the key
                     if(processTime > 2000) {
-                        try {
-                            // Sleep the user thread so that ensuring, all tickets in  the batch is chosen
-                            Thread.sleep(2001);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
+                        // Sleep the user thread so that ensuring, all tickets in  the batch is chosen
+                        Thread.sleep(2001);
                         System.out.println("User " + user.getId() + " failed to purchase ticket " + ticket.getId());
                         ticket.tryOpen();
                     }
@@ -82,7 +81,7 @@ public class QueueService {
                         System.out.println("User " + user.getId() + " purchased ticket " + ticket.getId());
                         tickets.remove(ticket);
                     }
-                    // Remove user from waiting room after purchase
+                    // Remove user from waiting room after purchase or fail
                     waitingRoomService.getWaitingRoom().remove(user);
                     break;
                 }

@@ -52,8 +52,12 @@ public class User implements Runnable{
 
     @Override
     public void run() {
-        Random random = new Random();
-        int randomNumber = random.nextInt(3000);
-        QueueService.attemptPurchase(this, randomNumber);
+        try {
+            Random random = new Random();
+            int randomNumber = random.nextInt(3000);
+            QueueService.attemptPurchase(this, randomNumber);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Sorry, something happen");
+        }
     }
 }
