@@ -7,7 +7,7 @@ public class App {
         TicketingSystem ticketingSystem = new TicketingSystem(acceptableRange);
 
         // Create the tickets
-        ticketingSystem.setupTickets(80);
+        ticketingSystem.setupTickets(10);
         // Add users to waiting room before sale starts
         for (int i = 0; i < 100; i++) {
                 ticketingSystem.addUserToWaitingRoom(i, 0);
