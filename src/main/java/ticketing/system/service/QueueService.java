@@ -71,7 +71,8 @@ public class QueueService {
                 if (ticket.tryLock()) {
                     // If process time > 2000 (2s) then the user get kicked out and unlock the key
                     if(processTime > 2000) {
-                        // Sleep the user thread so that ensuring, all tickets in  the batch is chosen
+                        // Sleep the user thread so that
+                        // 'tickets.size()' users lock all available tickets in given time
                         Thread.sleep(2001);
                         System.out.println("User " + user.getId() + " failed to purchase ticket " + ticket.getId());
                         ticket.tryOpen();
