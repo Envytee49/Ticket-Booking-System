@@ -1,5 +1,6 @@
 package ticketing.system.service;
 
+import ticketing.system.exception.TicketGreaterThanUserException;
 import ticketing.system.model.Ticket;
 import ticketing.system.model.User;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class QueueService {
     private static WaitingRoomService waitingRoomService;
-    private static List<Ticket> tickets;
+    public static List<Ticket> tickets;
 
     /**
      * Initializes a new QueueService instance.
@@ -39,13 +40,13 @@ public class QueueService {
                     threads[i].start();
                 }
             }catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("TICKET LEFT: " + tickets.size());
+                new TicketGreaterThanUserException();
                 break;
             }
+            // Wait for every thread to finish
             for(int i = 0; i < tickets.size(); i++) {
                 threads[i].join();
             }
-
 
             Thread.sleep(2000);
 
@@ -62,22 +63,24 @@ public class QueueService {
      *
      * @param user the user who will attempt to purchase a ticket
      */
-    public static void attemptPurchase(User user, int random) {
+    public static void attemptPurchase(User user, int processTime) {
             for (Ticket ticket : tickets) {
                 if (ticket.tryLock()) {
-                    if(random > 2000) {
+                    // If process time > 2000 (2s) then the user get kicked out and unlock the key
+                    if(processTime > 2000) {
                         System.out.println("User " + user.getId() + " failed to purchase ticket " + ticket.getId());
                         ticket.tryOpen();
                     }
+                    // Else successfully purchase the ticket
                     else {
                         System.out.println("User " + user.getId() + " purchased ticket " + ticket.getId());
                         tickets.remove(ticket);
                     }
-                    waitingRoomService.getWaitingRoom().remove(user);  // Remove user from waiting room after purchase
+                    // Remove user from waiting room after purchase
+                    waitingRoomService.getWaitingRoom().remove(user);
                     break;
                 }
             }
-//        }
     }
     /**
      * Returns the list of tickets.
