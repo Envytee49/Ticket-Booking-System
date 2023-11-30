@@ -3,16 +3,16 @@ package ticketing.system;
 public class App {
     public static void main(String[] args) throws InterruptedException {
         // Prepare the system
-        int acceptableRange = 1000;
+        int acceptableRange = 10;
         TicketingSystem ticketingSystem = new TicketingSystem(acceptableRange);
 
         // Create the tickets
         ticketingSystem.setupTickets(10);
         // Add users to waiting room before sale starts
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 11; i++) {
                 System.out.println(i);
                 ticketingSystem.addUserToWaitingRoom(i, 0);
-            }
+        }
 
         // Start the sale
         ticketingSystem.startSale();

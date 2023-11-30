@@ -28,17 +28,24 @@ public class QueueService {
      * Processes the users in the waiting room, allowing them to attempt to purchase tickets.
      */
     public void processQueue() throws InterruptedException {
-        List<User> users = waitingRoomService.getWaitingRoom().stream()
-                .sorted(Comparator.comparing(User::getQueuePosition)).toList();
+        List<User> users;
         while(tickets.size() != 0) {
+            users = waitingRoomService.getWaitingRoom().stream()
+                    .sorted(Comparator.comparing(User::getQueuePosition)).toList();
             Thread[] threads = new Thread[tickets.size()];
-            for(int i = 0; i < tickets.size(); i++) {
-                threads[i] = new Thread(users.get(i));
-                threads[i].start();
+            try {
+                for (int i = 0; i < tickets.size(); i++) {
+                    threads[i] = new Thread(users.get(i));
+                    threads[i].start();
+                }
+            }catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("TICKET LEFT: " + tickets.size());
+                break;
             }
             for(int i = 0; i < tickets.size(); i++) {
                 threads[i].join();
             }
+
 
             Thread.sleep(2000);
 

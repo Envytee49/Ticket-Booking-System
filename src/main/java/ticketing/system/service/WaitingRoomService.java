@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Manages the operations of the waiting room.
  */
 public class WaitingRoomService {
-    private final List<User> waitingRoom = new CopyOnWriteArrayList<>();
+    private final List<User> waitingRoom = new CopyOnWriteArrayList<>(); // threadsafe
 
     /**
      * Adds a user to the waiting room.
