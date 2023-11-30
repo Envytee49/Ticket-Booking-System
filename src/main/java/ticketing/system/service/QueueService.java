@@ -27,26 +27,23 @@ public class QueueService {
     /**
      * Processes the users in the waiting room, allowing them to attempt to purchase tickets.
      */
-    public void processQueue() {
+    public void processQueue() throws InterruptedException {
         List<User> users = waitingRoomService.getWaitingRoom().stream()
                 .sorted(Comparator.comparing(User::getQueuePosition)).toList();
-        int i = 0;
-        int max = tickets.size();
         while(tickets.size() != 0) {
-            for(; i < max; i++) {
-                Thread thread = new Thread(users.get(i));
-                thread.start();
+            Thread[] threads = new Thread[tickets.size()];
+            for(int i = 0; i < tickets.size(); i++) {
+                threads[i] = new Thread(users.get(i));
+                threads[i].start();
             }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            for(int i = 0; i < tickets.size(); i++) {
+                threads[i].join();
             }
+
+            Thread.sleep(2000);
+
             if(tickets.size() != 0) {
                 System.out.println("let next "+ tickets.size()+" users in queue");
-                i = max;
-                max = max + tickets.size();
-                System.out.println("i " + i + " max "+max);
             }
             else System.out.println("TICKET SOLD OUT");
         }
@@ -61,17 +58,15 @@ public class QueueService {
     public static void attemptPurchase(User user, int random) {
             for (Ticket ticket : tickets) {
                 if (ticket.tryLock()) {
-                    System.out.println("User " + user.getId() + " in lock");
                     if(random > 2000) {
                         System.out.println("User " + user.getId() + " failed to purchase ticket " + ticket.getId());
                         ticket.tryOpen();
-                        // ra hoac vao
                     }
                     else {
                         System.out.println("User " + user.getId() + " purchased ticket " + ticket.getId());
-                        waitingRoomService.getWaitingRoom().remove(user);  // Remove user from waiting room after purchase
                         tickets.remove(ticket);
                     }
+                    waitingRoomService.getWaitingRoom().remove(user);  // Remove user from waiting room after purchase
                     break;
                 }
             }

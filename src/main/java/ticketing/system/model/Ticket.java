@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Ticket {
     private final int id;
-    private AtomicBoolean locked = new AtomicBoolean(false);
+    private final AtomicBoolean locked = new AtomicBoolean(false);
 
     public Ticket(int id) {
         this.id = id;
@@ -35,7 +35,7 @@ public class Ticket {
     public boolean tryLock() {
         return locked.compareAndSet(false, true);
     }
-    public boolean tryOpen() {
-        return locked.compareAndSet(true, false);
+    public void tryOpen() {
+        locked.compareAndSet(true, false);
     }
 }

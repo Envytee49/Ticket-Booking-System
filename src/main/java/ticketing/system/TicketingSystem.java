@@ -56,7 +56,7 @@ public class TicketingSystem{
     /**
      * Starts the ticket sale by processing the users in the waiting room.
      */
-    public void startSale() {
+    public void startSale() throws InterruptedException {
         this.queueService = new QueueService(waitingRoomService, tickets);
         queueService.processQueue();
     }
