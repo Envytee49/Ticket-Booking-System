@@ -88,12 +88,4 @@ public class QueueService {
                 }
             }
     }
-    /**
-     * Returns the list of tickets.
-     *
-     * @return the list of tickets
-     */
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
 }

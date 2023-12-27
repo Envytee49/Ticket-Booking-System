@@ -10,28 +10,20 @@ import java.util.Random;
  */
 public class User implements Runnable{
     private final int id;
-    private final int arrivalTime;
     private Integer queuePosition;
 
     /**
      * Initializes a new User instance.
      *
      * @param id the id of the user
-     * @param arrivalTime the arrival time of the user
      */
-    public User(int id, int arrivalTime) {
+    public User(int id) {
         this.id = id;
-        this.arrivalTime = arrivalTime;
     }
 
     public int getId() {
         return id;
     }
-
-    public int getArrivalTime() {
-        return arrivalTime;
-    }
-
     /**
      * Returns the queue position of the user.
      *
@@ -40,7 +32,6 @@ public class User implements Runnable{
     public Integer getQueuePosition() {
         return queuePosition;
     }
-
     /**
      * Sets the queue position of the user.
      *

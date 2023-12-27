@@ -27,7 +27,7 @@ public class QueueManagerService {
         List<User> users = waitingRoomService.getWaitingRoom();
 
         for (User user : users) {
-            int queuePosition = calculateQueuePosition(user, users);
+            int queuePosition = calculateQueuePosition(users);
             user.setQueuePosition(queuePosition);
         }
     }
@@ -35,11 +35,10 @@ public class QueueManagerService {
     /**
      * Calculates the queue position for the given user.
      *
-     * @param user the user whose queue position will be calculated
      * @param users the list of users in the waiting room
      * @return the queue position for the user
      */
-    private int calculateQueuePosition(User user, List<User> users) {
+    private int calculateQueuePosition(List<User> users) {
         if (users.isEmpty()) {
             return 0;
         } else {

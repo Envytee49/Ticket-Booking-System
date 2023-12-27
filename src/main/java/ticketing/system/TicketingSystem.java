@@ -45,11 +45,10 @@ public class TicketingSystem{
      * Adds a user to the waiting room.
      *
      * @param userId the id of the user to be added
-     * @param arrivalTime the arrival time of the user
      */
 
-    public void addUserToWaitingRoom(int userId, int arrivalTime) {
-        waitingRoomService.addUser(new User(userId, arrivalTime));
+    public void addUserToWaitingRoom(int userId) {
+        waitingRoomService.addUser(new User(userId));
         queueManagerService.manageQueue();
     }
 

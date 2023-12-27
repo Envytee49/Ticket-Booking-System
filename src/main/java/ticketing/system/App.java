@@ -10,26 +10,10 @@ public class App {
         ticketingSystem.setupTickets(1000);
         // Add users to waiting room before sale starts
         for (int i = 0; i < 10000; i++) {
-                ticketingSystem.addUserToWaitingRoom(i, 0);
+                ticketingSystem.addUserToWaitingRoom(i);
         }
 
         // Start the sale
         ticketingSystem.startSale();
-
-//        // Users arrive at different times
-//        for (int i = 400; i < 700; i++) {
-//            ticketingSystem.addUserToWaitingRoom(i, 1);
-//        }
-//        ticketingSystem.startSale();
-//
-//        for (int i = 700; i < 900; i++) {
-//            ticketingSystem.addUserToWaitingRoom(i, 2);
-//        }
-//        ticketingSystem.startSale();
-//
-//        for (int i = 900; i < 2000; i++) {
-//            ticketingSystem.addUserToWaitingRoom(i, 3);
-//        }
-//        ticketingSystem.startSale();
     }
 }
