@@ -2,22 +2,19 @@ package ticketing.system.service;
 
 import ticketing.system.model.User;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class QueueManagerService {
     private final WaitingRoomService waitingRoomService;
-    private final int acceptableRange;
 
     /**
      * Initializes a new QueueManagerService instance.
      *
      * @param waitingRoomService the service to manage the waiting room
-     * @param acceptableRange the acceptable range for the queue positions
      */
-    public QueueManagerService(WaitingRoomService waitingRoomService, int acceptableRange) {
+    public QueueManagerService(WaitingRoomService waitingRoomService) {
         this.waitingRoomService = waitingRoomService;
-        this.acceptableRange = acceptableRange;
     }
 
     /**
@@ -25,9 +22,9 @@ public class QueueManagerService {
      */
     public void manageQueue() {
         List<User> users = waitingRoomService.getWaitingRoom();
-
+        Collections.shuffle(WaitingRoomService.queuePosition);
         for (User user : users) {
-            int queuePosition = calculateQueuePosition(users);
+            int queuePosition = calculateQueuePosition(user);
             user.setQueuePosition(queuePosition);
         }
     }
@@ -35,16 +32,11 @@ public class QueueManagerService {
     /**
      * Calculates the queue position for the given user.
      *
-     * @param users the list of users in the waiting room
+     * @param user user in the waiting room
      * @return the queue position for the user
      */
-    private int calculateQueuePosition(List<User> users) {
-        if (users.isEmpty()) {
-            return 0;
-        } else {
-            int lowerBound = Math.max(0, users.size() - acceptableRange);
-            return ThreadLocalRandom.current().nextInt(lowerBound, users.size() + 1);
-        }
+    private int calculateQueuePosition(User user) {
+        return WaitingRoomService.queuePosition.get(user.getId());
     }
 }
 

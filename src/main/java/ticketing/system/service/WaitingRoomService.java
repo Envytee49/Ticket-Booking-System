@@ -3,6 +3,7 @@ package ticketing.system.service;
 
 import ticketing.system.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class WaitingRoomService {
     private final List<User> waitingRoom = new CopyOnWriteArrayList<>(); // threadsafe
-
+    public static List<Integer> queuePosition = new ArrayList<>();
     /**
      * Adds a user to the waiting room.
      *
@@ -19,6 +20,7 @@ public class WaitingRoomService {
      */
     public void addUser(User user) {
         waitingRoom.add(user);
+        queuePosition.add(user.getId());
     }
 
     /**

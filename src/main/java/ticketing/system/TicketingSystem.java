@@ -13,20 +13,16 @@ import java.util.List;
  * Manages the operations of the ticketing system.
  */
 public class TicketingSystem{
-    private final int acceptableRange;
     private final WaitingRoomService waitingRoomService;
     private final QueueManagerService queueManagerService;
     private final List<Ticket> tickets;
     private QueueService queueService;
     /**
      * Initializes a new TicketingSystem instance.
-     *
-     * @param acceptableRange the acceptable range for the queue positions
      */
-    public TicketingSystem(int acceptableRange) {
-        this.acceptableRange = acceptableRange;
+    public TicketingSystem() {
         this.waitingRoomService = new WaitingRoomService();
-        this.queueManagerService = new QueueManagerService(waitingRoomService, acceptableRange);
+        this.queueManagerService = new QueueManagerService(waitingRoomService);
         this.tickets = new ArrayList<>();
     }
 
